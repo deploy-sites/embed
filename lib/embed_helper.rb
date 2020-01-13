@@ -7,20 +7,17 @@ require 'cgi'
 module Embed
   module EmbedHelper
     def _youtube_embed(url, width, height, protocol)
-      video_id = Embed.youtube_video_id(url)
-      html = %Q{<iframe id="#{video_id}" type="text/html" width="#{width}" height="#{height}" src="#{protocol}://www.youtube.com/embed/#{video_id}?autoplay=0&rel=0" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen="true"></iframe>}
+      html = %Q{<iframe id="#{Embed.video_id(url)}" src="#{Embed.video_url(url, protocol)}?autoplay=0&rel=0" type="text/html" width="#{width}" height="#{height}" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen="true"></iframe>}
       html.respond_to?(:html_safe) ? html.html_safe : html
     end
 
     def _vimeo_embed(url, width, height, protocol)
-      video_id = Embed.vimeo_video_id(url)
-      html = %Q{<iframe src="#{protocol}://player.vimeo.com/video/#{video_id}" width="#{width}" height="#{height}" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>}
+      html = %Q{<iframe id="#{Embed.video_id(url)}" src="#{Embed.video_url(url, protocol)}" width="#{width}" height="#{height}" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>}
       html.respond_to?(:html_safe) ? html.html_safe : html
     end
 
     def _facebook_embed(url, width, height, protocol)
-      url_with_protocol = "#{protocol}://www.facebook.com/plugins/video.php?href=" + CGI::escape(url.gsub(%r{^\w+://}, "#{protocol}://"))
-      html = %Q{<iframe src="#{url_with_protocol}&width=#{width}&show_text=0" width="#{width}" height="#{height}" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>}
+      html = %Q{<iframe id="#{Embed.video_id(url)}" src="#{Embed.video_url(url, protocol)}&width=#{width}&show_text=0" width="#{width}" height="#{height}" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>}
       html.respond_to?(:html_safe) ? html.html_safe : html
     end
 
